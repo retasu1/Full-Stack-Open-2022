@@ -1,6 +1,13 @@
 const Header = ({ course }) => <h1>{course}</h1>
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>
+const Total = ({parts}) => {
+  //console.log(parts)
+  const sum = parts.map(part => part.exercises).reduce((partialSum, a) => partialSum +a, 0)
+  //console.log(sum)
+  return(
+    <p><b>total of {sum} exercises</b></p>
+  )
+}
 
 const Part = ({ part }) => {
   //console.log(part)
@@ -11,7 +18,6 @@ const Part = ({ part }) => {
   )
  
 }
-
 
 const Content = ({ parts }) => {
   //console.log('parts:',parts)
@@ -28,7 +34,8 @@ const Course = ({course}) => {
   return(
     <div>
       <Header course={course.name}/>
-      <Content parts={course.parts}/>      
+      <Content parts={course.parts}/> 
+      <Total parts={course.parts}/>     
     </div>
 
   )
