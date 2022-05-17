@@ -9,13 +9,28 @@ const Country = ({country}) => {
         capital {country.capital} <br />
         area {country.area}
       </p>
-      <h2>languages:</h2>
+      <b>languages:</b>
       <ul>
         {Object.entries(country.languages).map(([key, value]) => 
           <li>{value}</li>
         )}
       </ul>
       <img src={country.flags.png} alt={country.name.common + ' flag'}></img>
+    </div>
+  )
+}
+
+const CountryName = ({country}) => {
+  const [showCountry, setShowCountry] = useState(false)
+
+  return(
+    <div>
+      {country.name.common} 
+      <button onClick={() => setShowCountry(!showCountry)}>
+        {showCountry? 'hide' : 'show'}
+      </button>
+      {showCountry? 
+      <Country country={country}/>:''}
     </div>
   )
 }
@@ -29,11 +44,11 @@ const Countries = ({countries}) => {
   } else if (countries.length > 1) {
     return (
       <div>
-        {countries.map(country => <p>{country.name.common}</p>)}
+        {countries.map(country => <CountryName country={country} />)}
       </div>
     )
   } else if (countries.length === 1) {
-    console.log(countries[0])
+    //console.log(countries[0])
     return (
       <Country country={countries[0]}/>
     )
@@ -45,11 +60,11 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
+    //console.log('effect')
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
-        console.log('promise fulfilled')
+        //console.log('promise fulfilled')
         setCountries(response.data)
       })
   }, [])
