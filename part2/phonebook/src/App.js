@@ -44,7 +44,7 @@ const PersonForm = ({onSubmit, value1, onChange1, value2, onChange2}) => {
   )
 }
 
-const Notification = ({message}) => {
+const Success = ({message}) => {
   if (message === null) {
     return null
   }
@@ -56,12 +56,26 @@ const Notification = ({message}) => {
   )
 }
 
+const Error = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
+
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
   const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     peopleService
@@ -79,17 +93,24 @@ const App = () => {
     if (persons.some(person => person.name === newName)) {
       const id = persons.filter(person => person.name === newName)[0].id
       const person = persons.find(n => n.id === id)
-      console.log(person)
       const changedNumber = {...person, number:newNumber}
+
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)) {
         peopleService
-          .update(id, changedNumber).then(returnedPerson => {
+          .update(id, changedNumber)
+          .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
             setSuccessMessage(`${newName} number changed`)
             setTimeout(() => {
               setSuccessMessage(null)
+            }, 5000)})
+          .catch(error => {
+            setErrorMessage(`Information of ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null)
             }, 5000)
           })
+          
       }
     } else {
       const personObject = {
@@ -151,7 +172,8 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={successMessage}/>
+      <Success message={successMessage}/>
+      <Error message={errorMessage}/>
       <Filter onSubmit={setFilterName} value={filterName} onChange={handleFilterChange}/>
 
       <h3>add a new</h3>
