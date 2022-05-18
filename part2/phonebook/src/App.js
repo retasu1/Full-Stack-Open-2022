@@ -42,7 +42,18 @@ const PersonForm = ({onSubmit, value1, onChange1, value2, onChange2}) => {
       </div>
     </form>     
   )
- 
+}
+
+const Notification = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
 }
 
 const App = () => {
@@ -50,6 +61,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     peopleService
@@ -71,9 +83,12 @@ const App = () => {
       const changedNumber = {...person, number:newNumber}
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)) {
         peopleService
-          .update(id, changedNumber)
-          .then(returnedPerson => {
+          .update(id, changedNumber).then(returnedPerson => {
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            setSuccessMessage(`${newName} number changed`)
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
           })
       }
     } else {
@@ -88,6 +103,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setSuccessMessage(`${newName} added`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
         })
     }
   }
@@ -98,12 +117,12 @@ const App = () => {
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setFilterName(event.target.value)
   }
 
@@ -131,7 +150,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={successMessage}/>
       <Filter onSubmit={setFilterName} value={filterName} onChange={handleFilterChange}/>
 
       <h3>add a new</h3>
