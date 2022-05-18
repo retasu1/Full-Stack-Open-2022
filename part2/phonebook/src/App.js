@@ -2,12 +2,18 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import peopleService from './services/persons'
 
-const Person = ({name, number}) => <p>{name} {number}</p>
+const Person = ({name, number, onClick}) => 
+  <div>
+    {name} {number} 
+    <button onClick={onClick}>
+        delete
+    </button>
+  </div>
 
-const Persons = ({persons}) => {
+const Persons = ({persons, onClick}) => {
   return(
     <div>
-      {persons.map(person => <Person key={person.name} name={person.name} number={person.number}/>)}
+      {persons.map(person => <Person key={person.name} name={person.name} number={person.number} onClick={() => onClick(person.name)}/>)}
     </div>
   )
 }
@@ -66,7 +72,6 @@ const App = () => {
         number: newNumber
       }
 
-
       peopleService
         .create(personObject)
         .then(returnedPerson => {
@@ -91,6 +96,26 @@ const App = () => {
     console.log(event.target.value)
     setFilterName(event.target.value)
   }
+
+  const handlePersonDelete = (name) => {
+    const id = persons.filter(person => person.name === name)[0].id
+    console.log(id);
+    if (window.confirm(name + ' would be deleted!')) {
+      console.log(name + ' deleted')   
+      peopleService
+        .remove(id)
+        .then(
+          peopleService
+            .getAll()
+            .then(updatedPersons => {
+              setPersons(updatedPersons)
+            })
+        )
+    } else {
+      console.log('deletion cancelled');
+    }
+    
+  }
   
   const peopleToShow = filterName === '' ?
   persons : persons.filter(person => person.name === filterName)
@@ -104,7 +129,7 @@ const App = () => {
       <PersonForm onSubmit={addPerson} value1={newName} value2={newNumber} onChange1={handlePersonChange} onChange2={handleNumberChange}/>
 
       <h2>Numbers</h2>
-      <Persons persons={peopleToShow}/>
+      <Persons persons={peopleToShow} onClick={handlePersonDelete}/>
 
     </div>
   )
