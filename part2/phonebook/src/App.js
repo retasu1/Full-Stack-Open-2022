@@ -65,7 +65,17 @@ const App = () => {
     event.preventDefault()
 
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+      const id = persons.filter(person => person.name === newName)[0].id
+      const person = persons.find(n => n.id === id)
+      console.log(person)
+      const changedNumber = {...person, number:newNumber}
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)) {
+        peopleService
+          .update(id, changedNumber)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+          })
+      }
     } else {
       const personObject = {
         name: newName,
@@ -99,7 +109,7 @@ const App = () => {
 
   const handlePersonDelete = (name) => {
     const id = persons.filter(person => person.name === name)[0].id
-    console.log(id);
+    //console.log(id);
     if (window.confirm(name + ' would be deleted!')) {
       console.log(name + ' deleted')   
       peopleService
@@ -114,7 +124,6 @@ const App = () => {
     } else {
       console.log('deletion cancelled');
     }
-    
   }
   
   const peopleToShow = filterName === '' ?
