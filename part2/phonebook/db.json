@@ -24,6 +24,11 @@
       "name": "Jennifer Crane",
       "number": "123-456-789",
       "id": 5
+    },
+    {
+      "name": "Holly Hock",
+      "number": "888",
+      "id": 6
     }
   ]
 }
