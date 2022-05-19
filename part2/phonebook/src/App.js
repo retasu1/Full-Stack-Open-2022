@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import peopleService from './services/persons'
 
 const Person = ({name, number, onClick}) => 
