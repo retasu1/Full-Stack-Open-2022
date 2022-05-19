@@ -60,9 +60,17 @@ const generateId = () => Math.floor(Math.random() * 200)
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (!body.name) {
+
+    const checkName = persons.some(person => person.name === body.name)
+    console.log(checkName)
+
+    if (!body.name || !body.number) {
         return response.status(400).json({
-            error: 'name missing'
+            error: 'info missing'
+        })
+    } else if (persons.find(person => person.name === body.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
         })
     }
 
