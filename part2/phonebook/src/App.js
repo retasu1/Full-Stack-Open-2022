@@ -86,17 +86,25 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    const newPerson = {
+      name: newName,
+      number: newNumber      
+    }
 
-    if (persons.some(person => person.name === newName)) {
-      const id = persons.filter(person => person.name === newName)[0].id
-      const person = persons.find(n => n.id === id)
-      const changedNumber = {...person, number:newNumber}
+    setNewName('')
+    setNewNumber('')
 
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)) {
+    const existingPerson = persons.find(p => p.name === newPerson.name)
+
+    if (existingPerson) {
+      const changedNumber = {...existingPerson, number:newNumber}
+      const ok = window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)
+      
+      if (ok) {
         peopleService
-          .update(id, changedNumber)
+          .update(existingPerson.id, {changedNumber})
           .then(returnedPerson => {
-            setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
             setSuccessMessage(`${newName} number changed`)
             setTimeout(() => {
               setSuccessMessage(null)
@@ -107,26 +115,28 @@ const App = () => {
               setErrorMessage(null)
             }, 5000)
           })
-          
+          return
       }
-    } else {
-      const personObject = {
-        name: newName,
-        number: newNumber
-      }
+    } 
 
-      peopleService
-        .create(personObject)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
-          setNewName('')
-          setNewNumber('')
-          setSuccessMessage(`${newName} added`)
-          setTimeout(() => {
-            setSuccessMessage(null)
-          }, 5000)
-        })
-    }
+    peopleService
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+
+        setSuccessMessage(`${newName} added`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+    
   }
 
   const handlePersonChange = (event) => {
