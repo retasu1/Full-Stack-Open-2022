@@ -64,12 +64,14 @@ app.get('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
-    response.send(
-        `<div>Phonebook has info for ${persons.length} people</div>
-        <div>${new Date()}</div>
-        `
-    )
+app.get('/info', (request, response, next) => {
+    Person.find({}).then(people => {
+        response.send(
+            `<div>Phonebook has info for ${people.length} people</div>
+            <div>${new Date()}</div>
+            `            
+        )
+    })
 })
 
 //const generateId = () => Math.floor(Math.random() * 200)
@@ -105,6 +107,20 @@ app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
         .then(result => {
             response.status(204).end()
+        })
+        .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body
+    const person = {
+        name: body.name,
+        number: body.number,
+    }
+
+    Person.findByIdAndUpdate(request.params.id, person, {new:true})
+        .then(updatedPerson => {
+            response.json(updatedPerson)
         })
         .catch(error => next(error))
 })
