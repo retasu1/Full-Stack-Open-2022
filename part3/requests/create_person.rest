@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name": "Jason Statham",
-    "number": "8888888888"
+    "number": "88-88888888"
 }
 
 
@@ -12,6 +12,16 @@ POST http://localhost:3001/api/persons HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Bo",
-    "number": "2321312"
+    "name": "Bownn",
+    "number": "23--231729381"
 }
+
+###
+POST http://localhost:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "John",
+    "number": "23-1729381"
+}
+
