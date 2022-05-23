@@ -51,6 +51,17 @@ const blogs = [
   }
 ]
 
+const listWithOneBlog = [
+  {
+    _id: '5a422aa71b54a676234d17f8',
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes: 5,
+    __v: 0
+  }
+]
+
 test('dummy returns one', () => {
   const blogs = []
 
@@ -59,17 +70,6 @@ test('dummy returns one', () => {
 })
 
 describe('total likes', () => {
-  const listWithOneBlog = [
-    {
-      _id: '5a422aa71b54a676234d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    }
-  ]
-
   test('of empty list is zero', () => {
     const result = listHelper.totalLikes([])
     expect(result).toBe(0)
@@ -83,5 +83,22 @@ describe('total likes', () => {
   test('of a bigger list is calculated right', () => {
     const result = listHelper.totalLikes(blogs)
     expect(result).toBe(36)
+  })
+})
+
+describe('favourite blog', () => {
+  test('of empty list is empty json', () => {
+    const result = listHelper.favouriteBlog([])
+    expect(result).toStrictEqual({})
+  })
+
+  test('when list has only one blog, equals that blog', () => {
+    const result = listHelper.favouriteBlog(listWithOneBlog)
+    expect(result).toBe(listWithOneBlog[0])
+  })
+
+  test('of a bigger list favourite blog is returned', () => {
+    const result = listHelper.favouriteBlog(blogs)
+    expect(result).toBe(blogs[2])
   })
 })
