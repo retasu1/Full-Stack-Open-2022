@@ -102,3 +102,20 @@ describe('favourite blog', () => {
     expect(result).toBe(blogs[2])
   })
 })
+
+describe('most common author', () => {
+  test('of empty list is empty string', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toBe('')
+  })
+
+  test('when list has only one blog, equals author of that blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toBe('Edsger W. Dijkstra')
+  })
+
+  test('of a bigger list most refrequent author is returned', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toBe('Robert C. Martin')
+  })
+})
