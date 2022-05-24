@@ -50,6 +50,27 @@ test('a valid blog can be added', async() => {
   expect(titles).toContain('Some war')
 })
 
+test('adding blog with no like field defaults to 0 likes', async() => {
+  const newBlog = {
+    _id: '5a422bc61b54a676234d17fd',
+    title: 'Some war',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const targetBlog = blogsAtEnd.find(blog => blog.title === 'Some war')
+
+  expect(targetBlog.likes).toBe(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
