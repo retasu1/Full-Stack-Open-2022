@@ -32,7 +32,7 @@ const mostBlogs = (blogs) => {
   if (blogs.length === 0) {
     return ''
   } else if (blogs.length === 1) {
-    return {author: blogs[0].author, blogs: 1}
+    return { author: blogs[0].author, blogs: 1 }
   }
 
   let authorCounts = _.countBy(blogs, 'author')
