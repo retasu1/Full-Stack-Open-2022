@@ -111,11 +111,40 @@ describe('most common author', () => {
 
   test('when list has only one blog, equals author of that blog', () => {
     const result = listHelper.mostBlogs(listWithOneBlog)
-    expect(result).toBe('Edsger W. Dijkstra')
+    expect(result).toStrictEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    })
   })
 
   test('of a bigger list most refrequent author is returned', () => {
     const result = listHelper.mostBlogs(blogs)
-    expect(result).toBe('Robert C. Martin')
+    expect(result).toStrictEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    })
+  })
+})
+
+describe('most liked author', () => {
+  test('of empty list is empty json', () => {
+    const result = listHelper.mostLikes([])
+    expect(result).toStrictEqual({})
+  })
+
+  test('when list has only one blog, equals author of that blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toStrictEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    })
+  })
+
+  test('of a bigger list most liked author is returned', () => {
+    const result = listHelper.mostLikes(blogs)
+    expect(result).toStrictEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    })
   })
 })

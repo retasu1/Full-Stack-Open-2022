@@ -1,6 +1,7 @@
+const { forEach } = require('lodash')
 const _ = require('lodash')
 
-const dummy = (blogs) => {
+const dummy = (_blogs) => {
   return 1
 }
 
@@ -30,21 +31,53 @@ const favouriteBlog = (blogs) => {
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) {
     return ''
+  } else if (blogs.length === 1) {
+    return {author: blogs[0].author, blogs: 1}
   }
 
-  //console.log(blogs[0].author)
   let authorCounts = _.countBy(blogs, 'author')
-  console.log(authorCounts)
 
-  let author = Object.keys(authorCounts).reduce((a, b) => authorCounts[a] > authorCounts[b] ? a : b)
+  let author = Object.keys(authorCounts).reduce((a, b) => authorCounts[a] > authorCounts[b] ?
+    { author: a, blogs: authorCounts[a] } :
+    { author: b, blogs: authorCounts[b] })
   console.log(author)
 
   return author
+}
+
+const mostLikes = (blogs) => {
+  let mostLikedAuthor = {
+    author: '',
+    likes: 0
+  }
+
+  if (blogs.length === 0) {
+    return {}
+  } else if (blogs.length === 1) {
+    return { author: blogs[0].author, likes: blogs[0].likes }
+  }
+
+  let authors = _.groupBy(blogs, 'author')
+  for (const author in authors) {
+    let authorBlogs = authors[author]
+    let authorLikes = 0
+    authorBlogs.forEach(blog => authorLikes += blog.likes)
+
+    if (authorLikes > mostLikedAuthor.likes) {
+      mostLikedAuthor.author = author,
+      mostLikedAuthor.likes = authorLikes
+    }
+  }
+
+  console.log(mostLikedAuthor)
+
+  return mostLikedAuthor
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
