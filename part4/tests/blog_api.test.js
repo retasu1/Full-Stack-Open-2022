@@ -71,6 +71,21 @@ test('adding blog with no like field defaults to 0 likes', async() => {
   expect(targetBlog.likes).toBe(0)
 })
 
+test('400 Bad Request if title and url missing', async() => {
+  const newBlog = {
+    _id: '5a422bc61b54a676234d17fd',
+    author: 'Robert C. Martin',
+    likes: 3,
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    //.expect('Content-Type', /application\/json/)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
