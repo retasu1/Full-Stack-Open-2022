@@ -109,6 +109,26 @@ describe('deletion of a blog', () => {
   })
 })
 
+describe('editing the amount of likes for a blog post', () => {
+  test('succeeds with status code 200 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToEdit = blogsAtStart[0]
+
+    blogToEdit.likes = blogToEdit.likes + 1
+
+    //console.log(blogToEdit)
+
+    await api
+      .put('/api/blogs', blogToEdit)
+      .send(blogToEdit)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBLogs.length)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
