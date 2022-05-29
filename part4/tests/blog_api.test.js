@@ -4,7 +4,6 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -28,66 +27,28 @@ test('the unique identifier property is named id', async () => {
   expect(response.body[0].id).toBeDefined()
 })
 
-describe('adding valid blogs', () => {
-  test('a valid blog can be added', async () => {
-    const user = helper.initialUsers[0]
-    const loginResult = await api
-      .post('/api/login')
-      .send(user)
+test('a valid blog can be added', async() => {
+  const newBlog = {
+    _id: '5a422bc61b54a676234d17fd',
+    title: 'Some war',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    likes: 3,
+    __v: 0
+  }
 
-    //console.log(loginResult.body)
-    const token = loginResult.body.token
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
 
-    const newBlog = {
-      _id: '5a422bc61b54a676234d17fd',
-      title: 'Some war',
-      author: 'Robert C. Martin',
-      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-      likes: 3,
-      __v: 0
-    }
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBLogs.length + 1)
 
-    await api
-      .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
-      .send(newBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/)
-
-    const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBLogs.length + 1)
-
-    const titles = blogsAtEnd.map(b => b.title)
-    expect(titles).toContain('Some war')
-  })
+  const titles = blogsAtEnd.map(b => b.title)
+  expect(titles).toContain('Some war')
 })
-
-describe('adding blog with no token should return error code 401', () => {
-  test('no token', async () => {
-    const token = ''
-
-    const newBlog = {
-      _id: '5a422bc61b54a676234d17fd',
-      title: 'Some war',
-      author: 'Robert C. Martin',
-      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-      likes: 3,
-      __v: 0
-    }
-
-    await api
-      .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
-      .send(newBlog)
-      .expect(401)
-      .expect('Content-Type', /application\/json/)
-
-    const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBLogs.length)
-  })
-})
-
-
 
 test('adding blog with no like field defaults to 0 likes', async() => {
   const newBlog = {
@@ -165,6 +126,35 @@ describe('editing the amount of likes for a blog post', () => {
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBLogs.length)
+  })
+})
+
+describe('blog should only be deletable by the user that created it', () => {
+  test('succeeds with status code 204 if token matches username', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    const rightUser = {
+      username: 'jane67',
+      name: 'Jane',
+      password: 'salmon'
+    }
+
+    console.log(blogToDelete)
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBLogs.length - 1
+    )
+
+    const titles = blogsAtEnd.map(r => r.title)
+
+    expect(titles).not.toContain(blogToDelete.title)
   })
 })
 
