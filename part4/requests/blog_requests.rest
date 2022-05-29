@@ -7,3 +7,16 @@ Content-Type: application/json
     "url": "www.janeausten.com",
     "likes": 7
 }
+
+
+###
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkphbmUyNyIsImlkIjoiNjI5MzRmZTkzNDI1YzJlMjMyNGUxYjM0IiwiaWF0IjoxNjUzODQ0MTExfQ.TZrxRp5EURjzYKbbqPw0vB1Ne2huFZdnTppOJJuCr9c
+
+{
+    "title": "Jane's favourite tea",
+    "author": "Jane Grusten",
+    "url": "www.janeausten.com/tea",
+    "likes": 2
+}
