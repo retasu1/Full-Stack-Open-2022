@@ -129,6 +129,35 @@ describe('editing the amount of likes for a blog post', () => {
   })
 })
 
+describe('blog should only be deletable by the user that created it', () => {
+  test('succeeds with status code 204 if token matches username', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    const rightUser = {
+      username: 'jane67',
+      name: 'Jane',
+      password: 'salmon'
+    }
+
+    console.log(blogToDelete)
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBLogs.length - 1
+    )
+
+    const titles = blogsAtEnd.map(r => r.title)
+
+    expect(titles).not.toContain(blogToDelete.title)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

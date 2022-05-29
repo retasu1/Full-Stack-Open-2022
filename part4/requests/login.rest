@@ -5,3 +5,12 @@ Content-Type: application/json
   "username": "Jane27",
   "password": "shellfish"
 }
+
+###
+post http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "John27",
+  "password": "sevenbeans"
+}
