@@ -3,6 +3,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const { userExtractor } = require('../utils/middleware')
+const mongoose = require('mongoose')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -51,10 +52,19 @@ blogsRouter.delete('/:id', userExtractor, async (request, response, next) => {
   response.status(204).end()
 })
 
-blogsRouter.put('/', async (request, response, next) => {
+blogsRouter.put('/:id', async (request, response) => {
   const blog = request.body
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new:true })
+  console.log('blog' + blog)
+  console.log(request.params)
+  console.log
+
+  const updatedBlog = await Blog
+    .findByIdAndUpdate(
+      request.params.id,
+      blog,
+      { new:true, runValidators: true, context: 'query' }
+    )
   response.status(200).json(updatedBlog)
 })
 

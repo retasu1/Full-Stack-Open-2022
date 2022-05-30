@@ -1,3 +1,19 @@
+PUT http://localhost:3003/api/blogs/6294b325e84b7996566ff9c7
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkphbmUyNyIsImlkIjoiNjI5MzRmZTkzNDI1YzJlMjMyNGUxYjM0IiwiaWF0IjoxNjUzODQ0MTExfQ.TZrxRp5EURjzYKbbqPw0vB1Ne2huFZdnTppOJJuCr9c
+
+{
+    "title": "Jane's favourite tea",
+    "author": "Jane Grusten",
+    "url": "www.janeausten.com/tea",
+    "likes": 3,
+    "user": "62934fe93425c2e2324e1b34",
+    "id": "6293b02cc427c26f092e94d5"
+}
+
+
+###
+
 POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
 
