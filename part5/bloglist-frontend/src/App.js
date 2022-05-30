@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [notification, setNotification] = useState(null)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -28,6 +31,13 @@ const App = () => {
     }
   }, [])
 
+  const notify = (message, type='info') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     
@@ -43,8 +53,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      notify(`${user.name} logged in successfully`)
     } catch (exception) {
-      console.log('Wrong credentials')
+      notify(`wrong username or password`, 'alert')
     }
   }
 
@@ -58,18 +69,24 @@ const App = () => {
 
   const addBlog = (event) => {
     event.preventDefault()
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url,
-      user: user
+
+    try {
+      const newBlog = {
+        title: title,
+        author: author,
+        url: url,
+        user: user
+      }
+
+      setAuthor('')
+      setTitle('')
+      setUrl('')
+
+      blogService.create(newBlog)
+      notify(`a new blog ${newBlog.title} by ${newBlog.author} added`)
+    } catch (exception) {
+      notify('missing title or author', 'alert')
     }
-
-    setAuthor('')
-    setTitle('')
-    setUrl('')
-
-    blogService.create(newBlog)
 
   }
 
@@ -77,6 +94,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification notification={notification} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -105,6 +123,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification notification={notification} />
       <p>
         {user.name} logged in
         <button onClick={handleLogout}>
