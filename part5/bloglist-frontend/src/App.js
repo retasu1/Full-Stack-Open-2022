@@ -71,6 +71,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     const result = await blogService.create(blogObject)
     setBlogs(blogs.concat(result))
+    notify(`a new blog ${blogObject.title} by ${blogObject.author} added`)
   }
 
   const blogFormRef = useRef()
@@ -113,6 +114,7 @@ const App = () => {
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
       </p>
+
       <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
         <BlogForm createBlog={addBlog} user={user}/>
       </Togglable>

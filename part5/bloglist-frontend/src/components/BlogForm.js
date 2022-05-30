@@ -20,7 +20,7 @@ const BlogForm = ({ createBlog, user}) => {
     setUrl('')
 
     createBlog(newBlog)
-    //notify(`a new blog ${newBlog.title} by ${newBlog.author} added`)
+    
   }
 
   return(
