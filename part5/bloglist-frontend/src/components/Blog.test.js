@@ -48,3 +48,25 @@ describe('<Blog />', () => {
   })
 })
 
+test('likes are registered', async () => {
+  const handleLikeTest = jest.fn()
+  const user = userEvent.setup()
+
+  const blog = {
+    title: 'Title of blog',
+    author: 'Blog Author',
+    likes: 7,
+    url: 'www.blog.com',
+    user: {username: 'Jane27'},
+  }
+  const currentUser = {username:"Jane27"}
+
+  render(<Blog blog={blog} currentUser={currentUser} handleLikeTest={handleLikeTest}/>)
+
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(handleLikeTest.mock.calls).toHaveLength(2)
+  
+})
