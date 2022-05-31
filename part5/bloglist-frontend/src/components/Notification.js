@@ -20,4 +20,6 @@ const Notification = ({ notification }) => {
   )
 }
 
+Notification.displayName = 'Notification'
+
 export default Notification

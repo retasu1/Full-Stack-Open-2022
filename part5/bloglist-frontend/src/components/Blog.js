@@ -53,4 +53,6 @@ const Blog = ({blog, currentUser, handleBlogDelete}) => {
   )
 }
 
+Blog.displayName = 'Blog'
+
 export default Blog

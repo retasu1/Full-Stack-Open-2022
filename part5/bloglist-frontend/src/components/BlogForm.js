@@ -55,4 +55,6 @@ const BlogForm = ({ createBlog, user}) => {
   )
 }
 
+BlogForm.displayName = 'BlogForm'
+
 export default BlogForm
