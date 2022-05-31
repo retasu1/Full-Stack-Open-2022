@@ -49,10 +49,13 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
+
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
+      //console.log(user)
+
       notify(`${user.name} logged in successfully`)
     } catch (exception) {
       notify(`wrong username or password`, 'alert')
@@ -64,7 +67,9 @@ const App = () => {
     console.log(`logging ${user.name} out`)
 
     window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
+    await setUser(null)
+    notify(`logged out successfully`)
+    //console.log(user)
   }
 
   const addBlog = async (blogObject) => {
@@ -72,6 +77,19 @@ const App = () => {
     const result = await blogService.create(blogObject)
     setBlogs(blogs.concat(result))
     notify(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+  }
+
+  const deleteBlog = (blogObject) => {
+    return async () => {
+      const ok = window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)
+    
+      if (ok) {
+        await blogService.remove(blogObject.id)
+        const updatedBlogs = await blogService.getAll()
+        setBlogs(updatedBlogs)
+        notify(`b${blogObject.title} by ${blogObject.author} has been deleted`)
+      }
+    }
   }
 
   const blogFormRef = useRef()
@@ -106,6 +124,7 @@ const App = () => {
     )
   }
 
+  //note that the sort order doesn't change on like click
   return (
     <div>
       <h2>blogs</h2>
@@ -122,7 +141,7 @@ const App = () => {
       {blogs
         .sort((firstBlog, secondBlog) => firstBlog.likes-secondBlog.likes)
         .reverse()
-        .map(blog =><Blog key={blog.id} blog={blog}/>
+        .map(blog =><Blog key={blog.id} blog={blog} currentUser={user} handleBlogDelete={deleteBlog(blog)}/>
       )}
 
     </div>
