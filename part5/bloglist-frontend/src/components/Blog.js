@@ -11,10 +11,8 @@ const Blog = ({blog, currentUser, handleBlogDelete}) => {
     setDetailsVisible(!detailsVisible)
   }
 
-  //console.log(blog)
-  //console.log(currentUser)
   const showWhenCorrectUser = {display: blog.user.username === currentUser.username ? '' : 'none'}
- // console.log(isAddedByUser)
+
 
   const blogStyle = {
     paddingTop: 10,
@@ -39,10 +37,10 @@ const Blog = ({blog, currentUser, handleBlogDelete}) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {blog.title} {blog.author}
       <button onClick={toggleVisibility}>{!detailsVisible ? 'view' : 'hide'}</button>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className='blog-details'>
         {blog.url} <br /> 
         likes {likes} <button onClick={handleLike}>like</button> <br />
         {blog.user.name}
