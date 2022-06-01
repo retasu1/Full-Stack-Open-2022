@@ -7,12 +7,17 @@ describe('Blog app', function() {
       password: 'kevincool'
     }
     cy.request('POST', 'http://localhost:3003/api/users', user)
+    const wrongUser = {
+      name: 'Kevin Bones',
+      username: 'kevinXX',
+      password: 'kevinlame'     
+    }
+    cy.request('POST', 'http://localhost:3003/api/users', wrongUser)
     cy.visit('http://localhost:3000')
   })
 
   it('Login form is shown', function() {
     cy.contains('login')
-
   })
 
   describe('Login', function() {
@@ -36,12 +41,15 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
-      cy.get('#username').type('kevin09')
-      cy.get('#password').type('kevincool')
-      cy.get('#login-button').click()      
+      cy.request('POST', 'http://localhost:3003/api/login', {
+        username: 'kevin09', password: 'kevincool'
+      }).then(response => {
+        localStorage.setItem('loggedBlogappUser', JSON.stringify(response.body))
+        cy.visit('http://localhost:3000')
+      })     
     })
 
-    it('A blog can be created', function() {
+    it('a blog can be created', function() {
       cy.contains('new blog').click()
 
       cy.get('#title').type('New blog')
@@ -49,28 +57,27 @@ describe('Blog app', function() {
       cy.get('#url').type('www.url.com')
       cy.contains('create blog').click()
       cy.contains('New blog Author Name')
-
-    })
-  })
-
-  describe('A blog can be liked', function() {
-    beforeEach(function() {
-      cy.get('#username').type('kevin09')
-      cy.get('#password').type('kevincool')
-      cy.get('#login-button').click()  
-
-      cy.contains('new blog').click()
-
-      cy.get('#title').type('New blog')
-      cy.get('#author').type('Author Name')
-      cy.get('#url').type('www.url.com')
-      cy.contains('create blog').click()
-    })
-
-    it.only('A blog can be liked', function() {
       cy.contains('view').click()
-      cy.contains('like').click()
-      cy.contains('likes 1')
+    })
+
+    describe('and a blog that exists', function () {
+      beforeEach(function() {
+        cy.contains('new blog').click()
+
+        cy.get('#title').type('Another blog')
+        cy.get('#author').type('Another Name')
+        cy.get('#url').type('www.url2.com')
+        cy.contains('create blog').click()
+      })
+
+      it('can be liked', function () {
+        cy.contains('view').click()
+
+      })
+
+      it('can be deleted', function () {
+        cy.contains('view')
+      })
     })
   })
   

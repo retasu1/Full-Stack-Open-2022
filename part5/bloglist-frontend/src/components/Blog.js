@@ -45,7 +45,7 @@ const Blog = ({ blog, currentUser, handleBlogDelete, handleLikeTest }) => {
         likes {likes} <button onClick={handleLike}>like</button> <br />
         {blog.user.name}
       </div>
-      <button style={showWhenCorrectUser} onClick={handleLike}>remove</button>
+      <button style={showWhenCorrectUser} onClick={handleBlogDelete}>remove</button>
 
     </div>
   )

@@ -9,7 +9,6 @@ module.exports = {
       'eslint:recommended',
       "plugin:react/recommended",
       "react-app",
-      "react-app/jest"
   ],
   "parserOptions": {
       "ecmaFeatures": {

@@ -87,7 +87,7 @@ const App = () => {
         await blogService.remove(blogObject.id)
         const updatedBlogs = await blogService.getAll()
         setBlogs(updatedBlogs)
-        notify(`b${blogObject.title} by ${blogObject.author} has been deleted`)
+        notify(`${blogObject.title} by ${blogObject.author} has been deleted`)
       }
     }
   }
