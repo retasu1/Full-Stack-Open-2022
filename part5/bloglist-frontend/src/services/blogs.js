@@ -3,8 +3,8 @@ const baseUrl = '/api/blogs'
 
 let token = null
 
-const setToken = newTOken => {
-  token = `bearer ${newTOken}`
+const setToken = newToken => {
+  token = `bearer ${newToken}`
 }
 
 const getAll = async () => {
@@ -13,11 +13,13 @@ const getAll = async () => {
 }
 
 const create = async newObject => {
+  console.log('token should be added' + token)
   const config = {
     headers: { Authorization: token }
   }
 
   const response = await axios.post(baseUrl, newObject, config)
+  console.log('this does not get printed')
   return response.data
 }
 

@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-const { userExtractor } = require('../utils/middleware')
-const mongoose = require('mongoose')
+//const { userExtractor } = require('../utils/middleware')
+//const mongoose = require('mongoose')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -13,8 +13,9 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogsRouter.post('/', userExtractor, async (request, response) => {
+blogsRouter.post('/', async (request, response) => {
   if(!request.user) {
+    console.log('no user?')
     return response.status(401).json({ error:'token missing or invalid' })
   }
 
@@ -37,8 +38,8 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogsRouter.delete('/:id', userExtractor, async (request, response, next) => {
-  const user = await request.user
+blogsRouter.delete('/:id', async (request, response, next) => {
+  const user = request.user
   const blog = await Blog.findById(request.params.id)
 
   if (blog.user.toString() !== user._id.toString()) {
