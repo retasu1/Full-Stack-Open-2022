@@ -41,15 +41,36 @@ describe('Blog app', function() {
       cy.get('#login-button').click()      
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.contains('new blog').click()
 
       cy.get('#title').type('New blog')
       cy.get('#author').type('Author Name')
       cy.get('#url').type('www.url.com')
       cy.contains('create blog').click()
-      cy.contains('New blog Author name')
+      cy.contains('New blog Author Name')
 
+    })
+  })
+
+  describe('A blog can be liked', function() {
+    beforeEach(function() {
+      cy.get('#username').type('kevin09')
+      cy.get('#password').type('kevincool')
+      cy.get('#login-button').click()  
+
+      cy.contains('new blog').click()
+
+      cy.get('#title').type('New blog')
+      cy.get('#author').type('Author Name')
+      cy.get('#url').type('www.url.com')
+      cy.contains('create blog').click()
+    })
+
+    it.only('A blog can be liked', function() {
+      cy.contains('view').click()
+      cy.contains('like').click()
+      cy.contains('likes 1')
     })
   })
   

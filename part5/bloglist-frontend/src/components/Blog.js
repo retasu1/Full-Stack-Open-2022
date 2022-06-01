@@ -11,8 +11,6 @@ const Blog = ({ blog, currentUser, handleBlogDelete, handleLikeTest }) => {
     setDetailsVisible(!detailsVisible)
   }
 
-  console.log(currentUser.username)
-  console.log(blog.user)
   const showWhenCorrectUser = { display: blog.user.username === currentUser.username ? '' : 'none' }
 
 
@@ -26,7 +24,7 @@ const Blog = ({ blog, currentUser, handleBlogDelete, handleLikeTest }) => {
 
   const handleLike = async (event) => {
     event.preventDefault()
-    console.log(`${blog.title + ' ' + blog.author} liked!`)
+    //console.log(`${blog.title + ' ' + blog.author} liked!`)
     const updatedBlog = {
       title: blog.title,
       author: blog.author,
@@ -44,7 +42,7 @@ const Blog = ({ blog, currentUser, handleBlogDelete, handleLikeTest }) => {
       <button onClick={toggleVisibility}>{!detailsVisible ? 'view' : 'hide'}</button>
       <div style={showWhenVisible} className='blog-details'>
         {blog.url} <br />
-        likes {likes} <button onClick={handleLikeTest}>like</button> <br />
+        likes {likes} <button onClick={handleLike}>like</button> <br />
         {blog.user.name}
       </div>
       <button style={showWhenCorrectUser} onClick={handleLike}>remove</button>
