@@ -19,7 +19,7 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   }
 
   const user = request.user
-  console.log(user)
+  //console.log(user)
   const blog = new Blog({ ...request.body, user: user.id })
 
   if (!blog.author || !blog.url) {

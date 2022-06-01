@@ -16,13 +16,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint": "eslint ."
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "eslint": "eslint .",
+    "cypress:open": "cypress open"
   },
   "browserslist": {
     "production": [
@@ -40,6 +35,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
+    "cypress": "^9.7.0",
     "eslint-plugin-jest": "^26.4.6"
   }
 }

@@ -1,0 +1,35 @@
+describe('Blog app', function() {
+  beforeEach(function() {
+    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    const user = {
+      name: 'Kevin Jones',
+      username: 'kevin09',
+      password: 'kevincool'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users', user)
+    cy.visit('http://localhost:3000')
+  })
+
+  it('Login form is shown', function() {
+    cy.contains('login')
+
+  })
+
+  describe('Login', function() {
+    it('succeeds with correct credentials', function() {
+      cy.get('#username').type('kevin09')
+      cy.get('#password').type('kevincool')
+      cy.get('#login-button').click()
+      cy.contains('Kevin Jones logged in')
+      cy.contains('logout').click()
+    })
+
+    it('fails with wrong credentials', function() {
+      cy.get('#username').type('kevin10')
+      cy.get('#password').type('kevincool')
+      cy.get('#login-button').click()
+      cy.contains('wrong username or password')
+    })
+  })
+  
+})

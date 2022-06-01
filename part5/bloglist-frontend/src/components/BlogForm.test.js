@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -7,7 +7,7 @@ import BlogForm from './BlogForm'
 
 test('BlogForm updates parent state and calls onSubmit', async () => {
   let container
-  const currentUser = {username:"Jane27"}
+  const currentUser = { username:'Jane27' }
   const createBlog = jest.fn()
   const user = userEvent.setup()
 

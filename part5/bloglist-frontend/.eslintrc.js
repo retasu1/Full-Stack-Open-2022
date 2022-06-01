@@ -6,8 +6,10 @@ module.exports = {
       "jest/globals": true 
   },
   "extends": [ 
-      "eslint:recommended",
-      "plugin:react/recommended"
+      'eslint:recommended',
+      "plugin:react/recommended",
+      "react-app",
+      "react-app/jest"
   ],
   "parserOptions": {
       "ecmaFeatures": {
@@ -26,7 +28,7 @@ module.exports = {
       ],
       "linebreak-style": [
           "error",
-          "unix"
+          "windows"
       ],
       "quotes": [
           "error",
@@ -46,7 +48,8 @@ module.exports = {
       ],
       "no-console": 0,
       "react/prop-types": 0,
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "no-import-assign": "off"
   },
   "settings": {
     "react": {

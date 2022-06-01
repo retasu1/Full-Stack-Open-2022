@@ -1,17 +1,19 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, currentUser, handleBlogDelete, handleLikeTest}) => {
+const Blog = ({ blog, currentUser, handleBlogDelete, handleLikeTest }) => {
   const [detailsVisible, setDetailsVisible] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
-  const showWhenVisible = {display: detailsVisible ? '' : 'none'}
+  const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setDetailsVisible(!detailsVisible)
   }
 
-  const showWhenCorrectUser = {display: blog.user.username === currentUser.username ? '' : 'none'}
+  console.log(currentUser.username)
+  console.log(blog.user)
+  const showWhenCorrectUser = { display: blog.user.username === currentUser.username ? '' : 'none' }
 
 
   const blogStyle = {
@@ -41,13 +43,13 @@ const Blog = ({blog, currentUser, handleBlogDelete, handleLikeTest}) => {
       {blog.title} {blog.author}
       <button onClick={toggleVisibility}>{!detailsVisible ? 'view' : 'hide'}</button>
       <div style={showWhenVisible} className='blog-details'>
-        {blog.url} <br /> 
+        {blog.url} <br />
         likes {likes} <button onClick={handleLikeTest}>like</button> <br />
         {blog.user.name}
       </div>
-      <button style={showWhenCorrectUser} onClick={handleBlogDelete}>remove</button>
+      <button style={showWhenCorrectUser} onClick={handleLike}>remove</button>
 
-    </div> 
+    </div>
   )
 }
 
